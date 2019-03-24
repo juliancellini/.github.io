@@ -4,10 +4,13 @@
 <head>
   <title>Prueba de Player</title>
   <style>
-    html, body, #vimeo_player { width:100%; height:100%; margin:0;  }
+    html, body{ width:100%; height:100%; margin:0;  }
+    #vimeo_player { width:100%; height: calc(100% - 100px); margin:0; }
+    #log_player { width:100%; height: 50px; margin:0; margin-bottom: 40px; background-color: silver;font-family: courier; overflow-x: auto;}
   </style>
 </head>
 <body>
+  <div id="log_player"></div>
   <iframe id="vimeo_player" src="https://player.vimeo.com/video/180668935" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
   <script src="https://player.vimeo.com/api/player.js"></script>
@@ -25,6 +28,7 @@
       m = 'Played ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
       console.log(m);
       document.title = m;
+      document.getElementById("log_player").innerHTML = m;
     });
 
   </script>
