@@ -6,31 +6,42 @@
   <style>
     html, body{ width:100%; height:100%; margin:0;  }
     #vimeo_player { width:100%; height: calc(100% - 100px); margin:0; }
-    #log_player { width:100%; height: 50px; margin:0; margin-bottom: 40px; background-color: silver;font-family: courier; overflow-x: auto;}
+    #log_player { width:100%; height: 50px; margin:0;  background-color: silver;font-family: courier; overflow-x: auto;}
   </style>
 </head>
 <body>
+  <button onclick="jcp.destroy();">destroy</button>
   <div id="log_player"></div>
   <iframe id="vimeo_player" src="https://player.vimeo.com/video/180668935" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
   <script src="https://player.vimeo.com/api/player.js"></script>
+  <script src="jcplayer.js"></script>
   <script>
 
-    var video01Player = new Vimeo.Player('vimeo_player');
-    
-    video01Player.setVolume(0);
-    
-    video01Player.on('play', function() {
-      console.log('Played the first video');
-    });    
+  	//jcPlayer.initialize(document.getElementById('vimeo_player'));
+  	jcp= new JCPlayer();
 
-    video01Player.on('timeupdate', function(e) {
+  	jcp.initialize('vimeo_player');
+  	jcp.heartbeatURL = "https://slashdot.org?s=__SECONDS__&USER=1222&DISP=abc";;
+  	jcp.seek(60);
+
+ 	jcp.onHeartbeat = function(e){
+      m = 'HEARTBEAT ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+      console.log(m);
+      //document.getElementById("log_player").innerHTML = m;            
+  	};
+
+ 	jcp.onTimeUpdate = function(e){
       m = 'Played ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
       console.log(m);
-      document.title = m;
-      document.getElementById("log_player").innerHTML = m;
-    });
+      //document.getElementById("log_player").innerHTML = m;            
+  	};
 
+ 	jcp.onPlay = function(e){
+      m = 'PLAY ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+      console.log(m);
+      document.getElementById("log_player").innerHTML = m;            
+  	};
   </script>
 </body>
 </html>
