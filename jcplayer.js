@@ -48,6 +48,10 @@ function JCPlayer() {
     		iframe = element;
     	}
 
+    	if (_player){ 
+    		_player.destroy();
+    	}
+
         _player = new Vimeo.Player(iframe);
 
 	    _player.on('timeupdate', _onTimeupdate);
@@ -56,37 +60,85 @@ function JCPlayer() {
 
     }
 
+    this.create = function (elementOrId, IdVimeo) {    	
+    	var element = document.getElementById(elementOrId);
+    	if (element) {
+    		elementOrId = element;
+    	}
+
+    	if (elementOrId) {
+	    	var iframe = document.createElement('iframe');
+			iframe.src = 'https://player.vimeo.com/video/' + IdVimeo;
+			iframe.style.width = "100%";
+			iframe.style.height = "100%";
+			iframe.style.border = 0;
+			iframe.frameBorder = 0;
+			iframe.setAttribute("allowfullscreen",true);
+
+			elementOrId.appendChild(iframe);
+
+			that.initialize(iframe);
+
+		} else {
+			console.log("JCPlayer.create: " + elementOrId + " NOT FOUND!");
+		}
+    }
+
     this.seek = function (seconds) {
-        _player.setCurrentTime(seconds);
+        if (_player){
+        	_player.setCurrentTime(seconds);
+        }
     }
 
     this.play = function () {
-        _player.play();
+        if (_player){
+        	_player.play();
+        }
     }
 
     this.pause = function () {
-        _player.pause();
+        if (_player){
+        	_player.pause();
+        }
+    }
+
+    this.playPause = function () {
+        if (_player){
+        	_player.getPaused().then(function(paused) {
+  				if (paused) {
+			 		_player.play();
+				} else {
+					_player.pause();	
+				}
+			});
+        }
     }
 
     this.destroy = function () {
-        _player.destroy();
+    	if (_player){
+    		_player.destroy();
+    		_player = null;
+    	}
     }
 
     this.unload = function () {
-        _player.unload();
+    	if (_player){
+    		_player.unload();
+    	}        
     }
 
     this.loadVideo = function (id) {
-        _player.loadVideo(id);
-    }    
-
+        if (_player){
+        	_player.loadVideo(id);
+        }
+    }
 }
 
 function getCORS(url, success) {
-	    var xhr = new XMLHttpRequest();
-	    if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
-	    xhr.open('GET', url);
-	    xhr.onload = success;
-	    xhr.send();
-	    return xhr;
-	}
+    var xhr = new XMLHttpRequest();
+    if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
+    xhr.open('GET', url);
+    xhr.onload = success;
+    xhr.send();
+    return xhr;
+}
