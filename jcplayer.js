@@ -4,7 +4,7 @@ function JCPlayer() {
     this.heartbeatURL = null;
     this.HEARTBEAT_TEMPLATE_SECONDS = "__SECONDS__";
 
-    var _lastHeartbeat = -1;
+    var _lastHeartbeat = 0;
     var that = this;
     var _player = null;
 
