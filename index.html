@@ -6,42 +6,66 @@
   <style>
     html, body{ width:100%; height:100%; margin:0;  }
     #vimeo_player { width:100%; height: calc(100% - 100px); margin:0; }
+    #div_vimeo_player { width:100%; height: calc(100% - 100px); margin:0; }
     #log_player { width:100%; height: 50px; margin:0;  background-color: silver;font-family: courier; overflow-x: auto;}
   </style>
 </head>
 <body>
-  <button onclick="jcp.destroy();">destroy</button>
+  <input type="text" id="vimeoId" value="10034935">
+  <button onclick="Create();">create</button>
+  <button onclick="Destroy()">destroy</button>
+  <button onclick="PlayPause();">playPause</button>
   <div id="log_player"></div>
+  <div id="div_vimeo_player"></div>
+  <!-- 
   <iframe id="vimeo_player" src="https://player.vimeo.com/video/180668935" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
+  -->
   <script src="https://player.vimeo.com/api/player.js"></script>
   <script src="jcplayer.js"></script>
   <script>
+  		var jcp = new JCPlayer();
 
+  		function Create(){	   	
+
+  			var vimeoId = document.getElementById("vimeoId").value;
+
+		  	jcp.heartbeatURL = "https://slashdot.org?s=__SECONDS__&USER=1222&video="+ vimeoId +"&DISP=abc"; 	
+
+		  	jcp.create("div_vimeo_player", vimeoId);
+		  	//jcp.initialize('vimeo_player');
+
+			jcp.seek(30);
+
+		 	jcp.onHeartbeat = function(e){
+		      m = 'HEARTBEAT ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+		      console.log(m);
+		      document.getElementById("log_player").innerHTML = m;            
+		  	};
+
+		 	jcp.onTimeUpdate = function(e){
+		      m = 'Played ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+		      console.log(m);
+		      //document.getElementById("log_player").innerHTML = m;            
+		  	};
+
+		 	jcp.onPlay = function(e){
+		      m = 'PLAY ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+		      console.log(m);
+		      //document.getElementById("log_player").innerHTML = m;            
+		  	}; 	
+
+		  	jcp.play();		
+  		}
+
+  		function Destroy(){	
+  			jcp.destroy();
+  		}
+
+  		function PlayPause(){	
+  			jcp.playPause();
+  		}
   	//jcPlayer.initialize(document.getElementById('vimeo_player'));
-  	jcp= new JCPlayer();
 
-  	jcp.initialize('vimeo_player');
-  	jcp.heartbeatURL = "https://slashdot.org?s=__SECONDS__&USER=1222&DISP=abc";;
-  	jcp.seek(60);
-
- 	jcp.onHeartbeat = function(e){
-      m = 'HEARTBEAT ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
-      console.log(m);
-      //document.getElementById("log_player").innerHTML = m;            
-  	};
-
- 	jcp.onTimeUpdate = function(e){
-      m = 'Played ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
-      console.log(m);
-      //document.getElementById("log_player").innerHTML = m;            
-  	};
-
- 	jcp.onPlay = function(e){
-      m = 'PLAY ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
-      console.log(m);
-      document.getElementById("log_player").innerHTML = m;            
-  	};
   </script>
 </body>
 </html>
