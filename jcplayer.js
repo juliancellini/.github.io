@@ -13,6 +13,15 @@ function JCPlayer() {
     this.onTimeUpdate = function(event){};
     this.onHeartbeat = function(event, heartbeat){};
 
+    function _onSeeked(e) {
+    	if (that.debug){
+    		m = 'seek ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
+  			console.log(m);
+  		}    	
+
+  		_lastHeartbeat = Math.floor(e.seconds / that.heartbeatInterval) * that.heartbeatInterval;  
+    }
+
     function _onTimeupdate(e) {
 
     	if (that.debug){
@@ -57,6 +66,7 @@ function JCPlayer() {
 
 	    _player.on('timeupdate', _onTimeupdate);
 	    _player.on('play', _onPlay);
+	    _player.on('seeked', _onSeeked);
 	    _player.on('pause', that.onPause);
 
     }
