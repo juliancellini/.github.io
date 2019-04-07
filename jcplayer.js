@@ -50,6 +50,7 @@ function JCPlayer() {
 
     	if (_player){ 
     		_player.destroy();
+    		_lastHeartbeat = -1;
     	}
 
         _player = new Vimeo.Player(iframe);
@@ -68,7 +69,7 @@ function JCPlayer() {
 
     	if (elementOrId) {
 	    	var iframe = document.createElement('iframe');
-			iframe.src = 'https://player.vimeo.com/video/' + IdVimeo;
+			iframe.src = 'https://player.vimeo.com/video/' + IdVimeo + "?app_id=122963";
 			iframe.style.width = "100%";
 			iframe.style.height = "100%";
 			iframe.style.border = 0;
@@ -135,10 +136,10 @@ function JCPlayer() {
 }
 
 function getCORS(url, success) {
-    var xhr = new XMLHttpRequest();
-    if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
-    xhr.open('GET', url);
-    xhr.onload = success;
-    xhr.send();
-    return xhr;
-}
+	    var xhr = new XMLHttpRequest();
+	    if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
+	    xhr.open('GET', url);
+	    xhr.onload = success;
+	    xhr.send();
+	    return xhr;
+	}
