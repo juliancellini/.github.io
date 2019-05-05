@@ -6,7 +6,8 @@
   <style>
     html, body{ width:100%; height:100%; margin:0;  }
     #vimeo_player { width:100%; height: calc(100% - 100px); margin:0; }
-    #div_vimeo_player { width:100%; height: calc(100% - 100px); margin:0; }
+    #div_vimeo_player { width:100%; height: calc(100% - 100px); margin:0; position:relative;}
+    /* #div_vimeo_player_glass { position: absolute; top:0; bottom:0; left:0; right: 0; } */
     #log_player { width:100%; height: 50px; margin:0;  background-color: silver;font-family: courier; overflow-x: auto;}
   </style>
 </head>
@@ -16,13 +17,24 @@
   <button onclick="Destroy()">destroy</button>
   <button onclick="PlayPause();">playPause</button>
   <div id="log_player"></div>
-  <div id="div_vimeo_player"></div>
+  <div id="div_vimeo_player" tabIndex="0">
+  	<!-- <div id="div_vimeo_player_glass" tabIndex="0"></div> -->
+  </div>
+  
   <!-- 
   <iframe id="vimeo_player" src="https://player.vimeo.com/video/180668935" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
   -->
   <script src="https://player.vimeo.com/api/player.js"></script>
   <script src="jcplayer.js"></script>
   <script>
+		
+		//var glass = document.getElementById("div_vimeo_player");
+
+		// glass.addEventListener('keydown', logKey);
+
+
+
+
   		var jcp = new JCPlayer();
 
   		function Create(){	   	
@@ -36,6 +48,8 @@
 
 			jcp.seek(30);
 
+			document.body.focus();
+
 		 	jcp.onHeartbeat = function(e){
 		      m = 'HEARTBEAT ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
 		      console.log(m);
@@ -44,7 +58,7 @@
 
 		 	jcp.onTimeUpdate = function(e){
 		      m = 'Played ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
-		      console.log(m);
+		      //console.log(m);
 		      //document.getElementById("log_player").innerHTML = m;            
 		  	};
 
@@ -55,6 +69,10 @@
 		  	}; 	
 
 		  	jcp.play();		
+
+		  	jcp.debug = true;
+		  	//glass.focus();
+		  	//glass.requestFullscreen();
   		}
 
   		function Destroy(){	
@@ -64,6 +82,9 @@
   		function PlayPause(){	
   			jcp.playPause();
   		}
+
+  		//setInterval(function () { glass.focus(); console.log("interval");}, 100);
+
   	//jcPlayer.initialize(document.getElementById('vimeo_player'));
 
   </script>
