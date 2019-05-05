@@ -146,7 +146,7 @@ function JCPlayer() {
  			}
 
 			_player.getCurrentTime().then(function(seconds) {
-				if (seconds > 30) { 
+				if (seconds < 30) { 
 					seconds = 30;
 				}
 				_player.setCurrentTime(seconds - 30);
