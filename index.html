@@ -16,6 +16,7 @@
   <button onclick="Create();">create</button>
   <button onclick="Destroy()">destroy</button>
   <button onclick="PlayPause();">playPause</button>
+  <button onclick="CC();">CC</button>
   <div id="log_player"></div>
   <div id="div_vimeo_player" tabIndex="0">
   	<!-- <div id="div_vimeo_player_glass" tabIndex="0"></div> -->
@@ -27,14 +28,6 @@
   <script src="https://player.vimeo.com/api/player.js"></script>
   <script src="jcplayer.js"></script>
   <script>
-		
-		//var glass = document.getElementById("div_vimeo_player");
-
-		// glass.addEventListener('keydown', logKey);
-
-
-
-
   		var jcp = new JCPlayer();
 
   		function Create(){	   	
@@ -83,6 +76,9 @@
   			jcp.playPause();
   		}
 
+  		function CC(){	
+  			jcp.setNextTrack();
+  		}
   		//setInterval(function () { glass.focus(); console.log("interval");}, 100);
 
   	//jcPlayer.initialize(document.getElementById('vimeo_player'));
