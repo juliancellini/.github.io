@@ -328,6 +328,7 @@ function JCPlayer() {
 			iframe.style.height = "100%";
 			iframe.style.border = 0;
 			iframe.frameBorder = 0;
+			iframe.allow = "autoplay";
 			iframe.tabIndex = "-1";
 			if (allowFullScreen) {
 				iframe.setAttribute("allowfullscreen", true);
