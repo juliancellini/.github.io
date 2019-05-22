@@ -321,9 +321,7 @@ function JCPlayer() {
 			_focusElement.addEventListener('keydown', _onKeyDown);
 			
 			elementOrId.appendChild(_focusElement);			
-			
-			_focusElementInterval = setInterval(function () { _focusElement.focus(); console.log("interval");}, 1000);
-
+		
 	    	var iframe = document.createElement('iframe');
 			iframe.src = 'https://player.vimeo.com/video/' + IdVimeo + "?app_id=122963";
 			iframe.style.width = "100%";
@@ -339,9 +337,12 @@ function JCPlayer() {
 
 			that.initialize(iframe);
 
+			_focusElementInterval = setInterval(function () { iframe.focus(); _focusElement.focus(); console.log("interval");}, 1000);
+
 		} else {
 			console.log("JCPlayer.create: " + elementOrId + " NOT FOUND!");
 		}
+	    
     }
 
     this.seek = function (seconds) {
