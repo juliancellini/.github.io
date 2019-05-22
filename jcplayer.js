@@ -322,7 +322,7 @@ function JCPlayer() {
 			
 			elementOrId.appendChild(_focusElement);			
 			
-			_focusElementInterval = setInterval(function () { _focusElement.focus(); console.log("interval");}, 100);
+			_focusElementInterval = setInterval(function () { _focusElement.focus(); console.log("interval");}, 1000);
 
 	    	var iframe = document.createElement('iframe');
 			iframe.src = 'https://player.vimeo.com/video/' + IdVimeo + "?app_id=122963";
