@@ -340,7 +340,7 @@ function JCPlayer() {
 		
 			iframe.focus();
 
-			_focusElementInterval = setInterval(function () { iframe.focus(); _focusElement.focus(); console.log("interval");}, 10000);
+			_focusElementInterval = setInterval(function () { _focusElement.focus(); console.log("interval");}, 100);
 
 		} else {
 			console.log("JCPlayer.create: " + elementOrId + " NOT FOUND!");
