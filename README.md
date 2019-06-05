@@ -256,21 +256,19 @@ En base a la tecla detectada, este evento puede invocar a algún otro más espec
 Evento | Teclas | Acción default
 -------| ----- | --------------
 onClose()| VK_ESCAPE VK_BACK | console.log("ESCAPE!") 
-onUp()| VK_UP | Subir el volumen un 10%   
-onDown()| VK_DOWN | Bajar el volumen un 10%   
-onLeft()| VK_LEFT | salta -30s  
-onRight()| VK_RIGHT | salta +30s  
-onNumber(number)| VK_0 al VK_9 | salta al (number * 10)% del tiempo total  
-onButtonRed | VK_RED | console.log("BUTTON RED!");
-onButtonGreen| VK_GREEN | console.log("BUTTON GREEN!");
-onButtonYellow | VK_YELLOW | console.log("BUTTON YELLOW!");
-onButtonBlue | VK_Blue | ejecuta setNextTrack()
+onUp()| VK_UP | Sube el volumen un 10%   
+onDown()| VK_DOWN | Baja el volumen un 10%   
+onLeft()| VK_LEFT | Salta -30s  
+onRight()| VK_RIGHT | Salta +30s  
+onNumber(number)| VK_0 al VK_9 | Salta al (number * 10)% del tiempo total  
+onButtonRed()| VK_RED | console.log("BUTTON RED!");
+onButtonGreen()| VK_GREEN | console.log("BUTTON GREEN!");
+onButtonYellow() | VK_YELLOW | console.log("BUTTON YELLOW!");
+onButtonBlue() | VK_Blue | Ejecuta setNextTrack();
+onPlayPause(isPlay) | VK_PLAY VK_PAUSE VK_SPACE | Ejecuta playPause()
+onStop() | VK_STOP | console.log("STOP!");
 
 Todos estos eventos específicos son cancelables.
-
-
-    this.onPlayPause = function(isPlay){ };
-    this.onStop = function(){ };
 
 -------------------------------------------------------------------
 ### Methods
