@@ -32,24 +32,62 @@
 
 ### Propiedades
 
-#### Modo Debug
+#### `debug`: Modo Debug
 
 Hace que el JCPlayer saque por consola JS mensajes de estado y trazas.
 
 `JCPlayer.debug = true;`
 
-#### Heartbeat URL
+#### `heartbeatURL`: Dónde latir
 
 Indica la URL a la cual el JCPlayer llamará para indicar el avance de la reproducción de video.  
-JCPlayer hará un GET a esa URL, reemplazando la string *HEARTBEAT_TEMPLATE_SECONDS* por el segundo en dónde se encuentra el video.
+JCPlayer hará un GET a esa URL, reemplazando la string *HEARTBEAT_TEMPLATE_SECONDS* por el segundo en dónde se encuentra el video.  
+JCPlayer no hará nada si el valor es `null`.  
+El valor default es `null`.
 
 `JCPlayer.heartbeatURL = "http://www.misitio.com/heartbeat?user=123&id=654321&s=__SECONDS__";`
 
-#### Heartbeat Interval
+#### `heartbeatInterval`: Ritmo Cardíaco
 
-Indica cada cuántos segundos se producirá el heartbeat en la reproducción contínua.
+Indica cada cuántos segundos se producirá el heartbeat en la reproducción contínua.  
+El valor default es `60`.
 
 `JCPlayer.heartbeatInterval = 10;`
+
+#### `heartbeatOnInterval`: ¿Latimos al mirar el video?
+
+Indica si se producirá el heartbeat en la reproducción contínua.  
+El valor default es `true`.
+
+`JCPlayer.heartbeatOnInterval = true;`
+
+#### `heartbeatOnPause`: ¿Latimos al pausar el video?
+
+Indica si se producirá el heartbeat cuando se pausa el video.  
+El valor default es `true`.
+
+`JCPlayer.heartbeatOnPause = true;`
+
+#### `heartbeatOnSeek`: ¿Latimos al saltar el video?
+
+Indica si se producirá el heartbeat cuando se hace un seek en el video.  
+El valor default es `true`.
+
+`JCPlayer.heartbeatOnSeek = true;`
+
+#### `heartbeatOnEnd`: ¿Latimos al finalizar el video?
+
+Indica si se producirá el heartbeat cuando se llega al final del video.  
+El valor default es `true`.
+
+`JCPlayer.heartbeatOnEnd = true;`
+
+#### `heartbeatOnDestroy`: ¿Latimos al cerrar el player?
+
+Indica si se producirá el heartbeat cuando se destruye el player.  
+El valor default es `true`.
+
+`JCPlayer.heartbeatOnDestroy = true;`
 
 -------------------------------------------------------------------
 ### Methods
