@@ -30,6 +30,28 @@
 
 ## API
 
+### Propiedades
+
+#### Modo Debug
+
+Hace que el JCPlayer saque por consola JS mensajes de estado y trazas.
+
+`JCPlayer.debug = true;`
+
+#### Heartbeat URL
+
+Indica la URL a la cual el JCPlayer llamará para indicar el avance de la reproducción de video.  
+JCPlayer hará un GET a esa URL, reemplazando la string *HEARTBEAT_TEMPLATE_SECONDS* por el segundo en dónde se encuentra el video.
+
+`JCPlayer.heartbeatURL = "http://www.misitio.com/heartbeat?user=123&id=654321&s=__SECONDS__";`
+
+#### Heartbeat Interval
+
+Indica cada cuántos segundos se producirá el heartbeat en la reproducción contínua.
+
+`JCPlayer.heartbeatInterval = 10;`
+
+-------------------------------------------------------------------
 ### Methods
 
 #### Create
@@ -88,4 +110,26 @@ Arranca el video si está detenido. Detiene el video si está corriendo
 
 `JCPlayer.playPause()`
 
+
+#### Seek
+
+Salta al segundo que se pasa por parámetro.
+
+`JCPlayer.seek(seconds)`
+
+Parámetro | Tipo | Descripción | Default
+--------- | ---- | ----------- | -------
+seconds | int | Segundo al que se quiere saltar |
+
+
+#### SetNextTrack
+
+De existir, selecciona el próximo subtítulo de la lista.   
+Si estamos viendo el último, deshabilita los subtítulos.  
+Si los subtítulos están deshabilitados, muestra el primero.  
+*Nota*: 
+Si el usuario elije un subtítulo mediante el menú que presenta vimeo, la lista quedará desincronizada.  
+La idea es proveer un método para ciclar en los subtítulos en las plataformas donde eso es no es posible para el usuario.
+
+`JCPlayer.setNextTrack()`
 
