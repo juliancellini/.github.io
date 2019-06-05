@@ -35,10 +35,9 @@ var VK_ESCAPE                   =    27;
 var VK_SPACE                    =    32; 
 
 function JCPlayer() {
-    this.heartbeatInterval = 60;
     this.debug = false;
     this.heartbeatURL = null;
-    this.debug = false;
+    this.heartbeatInterval = 60;
     this.heartbeatOnPause = true;
     this.heartbeatOnSeek = true;
     this.heartbeatOnEnd = true;
