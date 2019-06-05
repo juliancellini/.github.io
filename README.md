@@ -28,7 +28,10 @@
 ```
 -------------------------------------------------------------------
 
-### API
+## API
+
+### Methods
+
 #### Create
 
 Crea el player dentro del elemento que se le indica.
@@ -38,7 +41,7 @@ Crea el player dentro del elemento que se le indica.
 Parámetro | Tipo | Descripción | Default
 --------- | ---- | ----------- | -------
 elementOrId | string o DomElement | Un elemento DOM de la página, o un Id de un elemento de la página. Un iframe con el vimeo player se creará dentro de ese elemento |
-IdVimeo | int | Id del video |
+idVimeo | int | Id del video |
 allowFullScreen | bool| Indica si se permitirá al player de vimeo presentar el botón de pantalla completa | false
 
 #### Destroy
@@ -58,8 +61,31 @@ Quita el video actual del player. El player queda en estado inicial.
 
 Carga un nuevo video en el player. El player queda inicializado.
 
-`JCPlayer.loadVideo(id)`
+`JCPlayer.loadVideo(idVimeo)`
+
 Parámetro | Tipo | Descripción | Default
 --------- | ---- | ----------- | -------
-IdVimeo | int | Id del nuevo video |
+idVimeo | int | Id del nuevo video a cargar |
+
+
+#### Play
+
+Arranca el video.
+
+`JCPlayer.play()`
+
+
+#### Pause
+
+Detiene el video.
+
+`JCPlayer.pause()`
+
+
+#### PlayPause
+
+Arranca el video si está detenido. Detiene el video si está corriendo
+
+`JCPlayer.playPause()`
+
 
