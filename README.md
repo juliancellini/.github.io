@@ -41,53 +41,63 @@ Hace que el JCPlayer saque por consola JS mensajes de estado y trazas.
 #### `heartbeatURL`: Dónde latir
 
 Indica la URL a la cual el JCPlayer llamará para indicar el avance de la reproducción de video.  
-JCPlayer hará un GET a esa URL, reemplazando la string *HEARTBEAT_TEMPLATE_SECONDS* por el segundo en dónde se encuentra el video.  
+JCPlayer hará un GET a esa URL, reemplazando la string indicada en *`HEARTBEAT_TEMPLATE_SECONDS`* por el segundo en dónde se encuentra el video.  
+Es posible que se informen heartbeats duplicados: por ejemplo, si se configura `heartbeatOnPause` y `heartbeatOnEnd`, existe la posibilidad que lleguen 2 GET iguales, porque el Vimeo Player informa una pausa al llegar al final del video. Estoy viendo cómo evitarlo, pero con baja prioridad.  
 JCPlayer no hará nada si el valor es `null`.  
+
 El valor default es `null`.
 
-`JCPlayer.heartbeatURL = "http://www.misitio.com/heartbeat?user=123&id=654321&s=__SECONDS__";`
+`jCPlayer.heartbeatURL = "http://www.misitio.com/heartbeat?user=123&id=654321&s=__SECONDS__";`
 
 #### `heartbeatInterval`: Ritmo Cardíaco
 
 Indica cada cuántos segundos se producirá el heartbeat en la reproducción contínua.  
 El valor default es `60`.
 
-`JCPlayer.heartbeatInterval = 10;`
+`jCPlayer.heartbeatInterval = 10;`
 
 #### `heartbeatOnInterval`: ¿Latimos al mirar el video?
 
 Indica si se producirá el heartbeat en la reproducción contínua.  
 El valor default es `true`.
 
-`JCPlayer.heartbeatOnInterval = true;`
+`jCPlayer.heartbeatOnInterval = true;`
 
 #### `heartbeatOnPause`: ¿Latimos al pausar el video?
 
 Indica si se producirá el heartbeat cuando se pausa el video.  
 El valor default es `true`.
 
-`JCPlayer.heartbeatOnPause = true;`
+`jCPlayer.heartbeatOnPause = true;`
 
 #### `heartbeatOnSeek`: ¿Latimos al saltar el video?
 
 Indica si se producirá el heartbeat cuando se hace un seek en el video.  
 El valor default es `true`.
 
-`JCPlayer.heartbeatOnSeek = true;`
+`jCPlayer.heartbeatOnSeek = true;`
 
 #### `heartbeatOnEnd`: ¿Latimos al finalizar el video?
 
 Indica si se producirá el heartbeat cuando se llega al final del video.  
 El valor default es `true`.
 
-`JCPlayer.heartbeatOnEnd = true;`
+`jCPlayer.heartbeatOnEnd = true;`
 
 #### `heartbeatOnDestroy`: ¿Latimos al cerrar el player?
 
 Indica si se producirá el heartbeat cuando se destruye el player.  
 El valor default es `true`.
 
-`JCPlayer.heartbeatOnDestroy = true;`
+`jCPlayer.heartbeatOnDestroy = true;`
+
+
+#### `HEARTBEAT_TEMPLATE_SECONDS`: ¿Cómo formamos la URL del heartbeat?
+
+Indica el fragmento a reemplazar de `heartbeatURL` por el valor del segundo en donde se encuentra la reproducción.  
+El valor default es `"__SECONDS__"`, y no tiene realmente sentido cambiarlo.
+
+`jCPlayer.HEARTBEAT_TEMPLATE_SECONDS = "__AVANCE__";`
 
 -------------------------------------------------------------------
 ### Methods
@@ -96,7 +106,7 @@ El valor default es `true`.
 
 Crea el player dentro del elemento que se le indica.
 
-`JCPlayer.create(elementOrId, IdVimeo, allowFullScreen)`
+`jCPlayer.create(elementOrId, IdVimeo, allowFullScreen)`
 
 Parámetro | Tipo | Descripción | Default
 --------- | ---- | ----------- | -------
@@ -108,20 +118,20 @@ allowFullScreen | bool| Indica si se permitirá al player de vimeo presentar el 
 
 Libera recursos del player, quitando al iframe de la página.
 
-`JCPlayer.destroy()`
+`jCPlayer.destroy()`
 
 
 #### Unload
 
 Quita el video actual del player. El player queda en estado inicial.
 
-`JCPlayer.unload()`
+`jCPlayer.unload()`
 
 #### LoadVideo
 
 Carga un nuevo video en el player. El player queda inicializado.
 
-`JCPlayer.loadVideo(idVimeo)`
+`jCPlayer.loadVideo(idVimeo)`
 
 Parámetro | Tipo | Descripción | Default
 --------- | ---- | ----------- | -------
@@ -132,28 +142,28 @@ idVimeo | int | Id del nuevo video a cargar |
 
 Arranca el video.
 
-`JCPlayer.play()`
+`jCPlayer.play()`
 
 
 #### Pause
 
 Detiene el video.
 
-`JCPlayer.pause()`
+`jCPlayer.pause()`
 
 
 #### PlayPause
 
 Arranca el video si está detenido. Detiene el video si está corriendo
 
-`JCPlayer.playPause()`
+`jCPlayer.playPause()`
 
 
 #### Seek
 
 Salta al segundo que se pasa por parámetro.
 
-`JCPlayer.seek(seconds)`
+`jCPlayer.seek(seconds)`
 
 Parámetro | Tipo | Descripción | Default
 --------- | ---- | ----------- | -------
@@ -169,5 +179,5 @@ Si los subtítulos están deshabilitados, muestra el primero.
 Si el usuario elije un subtítulo mediante el menú que presenta vimeo, la lista quedará desincronizada.  
 La idea es proveer un método para ciclar en los subtítulos en las plataformas donde eso es no es posible para el usuario.
 
-`JCPlayer.setNextTrack()`
+`jCPlayer.setNextTrack()`
 
