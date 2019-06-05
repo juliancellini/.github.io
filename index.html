@@ -39,12 +39,12 @@
 		  	jcp.create("div_vimeo_player", vimeoId);
 		  	//jcp.initialize('vimeo_player');
 
-			//jcp.seek(30);
+			jcp.seek(30);
 
 			document.body.focus();
 
-		 	jcp.onHeartbeat = function(e){
-		      m = 'HEARTBEAT ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+		 	jcp.onHeartbeat = function(e, lastHeartbeat, reason){
+		      m = 'HEARTBEAT ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). lastHeartbeat:' + lastHeartbeat + " reason: " + reason;
 		      console.log(m);
 		      document.getElementById("log_player").innerHTML = m;            
 		  	};
@@ -63,9 +63,8 @@
 
 		  	jcp.play();		
 
-		  	jcp.debug = true;
-		  	//glass.focus();
-		  	//glass.requestFullscreen();
+		  	//jcp.debug = true;
+		  	
   		}
 
   		function Destroy(){	
