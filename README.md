@@ -264,9 +264,9 @@ onNumber(number)| VK_0 al VK_9 | Salta al (number * 10)% del tiempo total
 onButtonRed()| VK_RED | Ejecuta `console.log("BUTTON RED!");`
 onButtonGreen()| VK_GREEN | Ejecuta `console.log("BUTTON GREEN!");`
 onButtonYellow() | VK_YELLOW | Ejecuta `console.log("BUTTON YELLOW!");`
-onButtonBlue() | VK_BLUE | Ejecuta `setNextTrack();`
-onPlayPause(isPlay) | VK_PLAY VK_PAUSE VK_SPACE | Ejecuta `playPause();`
-onStop() | VK_STOP | Ejecuta `console.log("STOP!");}
+onButtonBlue() | VK_BLUE | Ejecuta `this.setNextTrack();`
+onPlayPause(isPlay) | VK_PLAY VK_PAUSE VK_SPACE | Ejecuta `this.playPause();`
+onStop() | VK_STOP | Ejecuta `console.log("STOP!");`
 
 Todos estos eventos específicos son cancelables.
 
