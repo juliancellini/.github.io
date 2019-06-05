@@ -7,7 +7,6 @@
     html, body{ width:100%; height:100%; margin:0;  }
     #vimeo_player { width:100%; height: calc(100% - 100px); margin:0; }
     #div_vimeo_player { width:100%; height: calc(100% - 100px); margin:0; position:relative;}
-    /* #div_vimeo_player_glass { position: absolute; top:0; bottom:0; left:0; right: 0; } */
     #log_player { width:100%; height: 50px; margin:0;  background-color: silver;font-family: courier; overflow-x: auto;}
   </style>
 </head>
@@ -18,69 +17,58 @@
   <button onclick="PlayPause();">playPause</button>
   <button onclick="CC();">CC</button>
   <div id="log_player"></div>
-  <div id="div_vimeo_player" tabIndex="0">
-  	<!-- <div id="div_vimeo_player_glass" tabIndex="0"></div> -->
-  </div>
+  <div id="div_vimeo_player" tabIndex="0"></div>
   
-  <!-- 
-  <iframe id="vimeo_player" src="https://player.vimeo.com/video/180668935" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-  -->
   <script src="https://player.vimeo.com/api/player.js"></script>
   <script src="jcplayer.js"></script>
   <script>
-  		var jcp = new JCPlayer();
+      var jcp = new JCPlayer();
 
-  		function Create(){	   	
+      function Create(){      
 
-  			var vimeoId = document.getElementById("vimeoId").value;
+        var vimeoId = document.getElementById("vimeoId").value;
 
-		  	jcp.heartbeatURL = "https://slashdot.org?s=__SECONDS__&USER=1222&video="+ vimeoId +"&DISP=abc"; 	
+        jcp.heartbeatURL = "https://slashdot.org?s=__SECONDS__&USER=1222&video="+ vimeoId +"&DISP=abc";   
 
-		  	jcp.create("div_vimeo_player", vimeoId);
-		  	//jcp.initialize('vimeo_player');
+        jcp.create("div_vimeo_player", vimeoId);
 
-			jcp.seek(30);
+        jcp.seek(30);
 
-			document.body.focus();
+        document.body.focus();
 
-		 	jcp.onHeartbeat = function(e, lastHeartbeat, reason){
-		      m = 'HEARTBEAT ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). lastHeartbeat:' + lastHeartbeat + " reason: " + reason;
-		      console.log(m);
-		      document.getElementById("log_player").innerHTML = m;            
-		  	};
+        jcp.onHeartbeat = function(e, lastHeartbeat, reason){
+            m = 'HEARTBEAT ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). lastHeartbeat:' + lastHeartbeat + " reason: " + reason;
+            console.log(m);
+            document.getElementById("log_player").innerHTML = m;            
+          };
 
-		 	jcp.onTimeUpdate = function(e){
-		      m = 'Played ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
-		      //console.log(m);
-		      //document.getElementById("log_player").innerHTML = m;            
-		  	};
+        jcp.onTimeUpdate = function(e){
+            m = 'Played ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+            //console.log(m);
+            //document.getElementById("log_player").innerHTML = m;            
+          };
 
-		 	jcp.onPlay = function(e){
-		      m = 'PLAY ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
-		      console.log(m);
-		      //document.getElementById("log_player").innerHTML = m;            
-		  	}; 	
+        jcp.onPlay = function(e){
+            m = 'PLAY ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+            console.log(m);
+            //document.getElementById("log_player").innerHTML = m;            
+          };  
 
-		  	jcp.play();		
+        jcp.play();   
+        //jcp.debug = true;        
+      }
 
-		  	//jcp.debug = true;
-		  	
-  		}
+      function Destroy(){ 
+        jcp.destroy();
+      }
 
-  		function Destroy(){	
-  			jcp.destroy();
-  		}
+      function PlayPause(){ 
+        jcp.playPause();
+      }
 
-  		function PlayPause(){	
-  			jcp.playPause();
-  		}
-
-  		function CC(){	
-  			jcp.setNextTrack();
-  		}
-  		//setInterval(function () { glass.focus(); console.log("interval");}, 100);
-
-  	//jcPlayer.initialize(document.getElementById('vimeo_player'));
+      function CC(){  
+        jcp.setNextTrack();
+      }
 
   </script>
 </body>
