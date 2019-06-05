@@ -207,7 +207,6 @@ jCPlayer.onTimeUpdate = function(event){
 };
 ```
 
-
 #### onHeartbeat(event, heartbeat, reason)
 
 No es cancelable. Para evitarlo usar las propiedades `heartbeatOn___`.
@@ -232,31 +231,46 @@ seconds|The amount of the video, in seconds, that has played
  * "OnDestroy"
 
 ```
-jCPlayer.onTimeUpdate = function(event){
+jCPlayer.onHeartbeat = function(event, heartbeat, reason){
     m = 'ONHEARTBEAT ' + event.seconds + ' of ' + event.duration + 
         ' (' +  (event.percent * 100).toFixed(2) + '%). " + 
-	"lastHeartbeat:' + lastHeartbeat + " reason: " + reason;
+	"lastHeartbeat:' + heartbeat + " reason: " + reason;
     console.log(m);
 };
 ```
 
+#### onKeyDown(event)
 
-    
-    this.onKeyDown = function(event){ };
-    
-    this.onClose = function(){ };
-    this.onUp = function(){ };
-    this.onDown = function(){ };
-    this.onLeft = function(){ };
-    this.onRight = function(){ };
-    this.onNumber = function(number){ };
+Cancelable. retornar `false` para cancelar el comportamiento default.
+Se dispara en el KeyDown del player.
+
+`event` es el evento nativo de javascript del evento onKeyDown (https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent):
+
+```
+jCPlayer.onKeyDown = function(event){
+    console.log(event);
+};
+```
+En base a la tecla detectada, este evento puede invocar a algún otro más específico, por ejemplo `onUp`, si el usuario presionó `VK_UP`. La lista de esos eventos es la siguiente:
+
+Evento | Teclas | Acción default
+-------| ----- | --------------
+onClose()| VK_ESCAPE VK_BACK | console.log("ESCAPE!") 
+onUp()| VK_UP | Subir el volumen un 10%   
+onDown()| VK_DOWN | Bajar el volumen un 10%   
+onLeft()| VK_LEFT | salta -30s  
+onRight()| VK_RIGHT | salta +30s  
+onNumber(number)| VK_0 al VK_9 | salta al (number * 10)% del tiempo total  
+onButtonRed | VK_RED | console.log("BUTTON RED!");
+onButtonGreen| VK_GREEN | console.log("BUTTON GREEN!");
+onButtonYellow | VK_YELLOW | console.log("BUTTON YELLOW!");
+onButtonBlue | VK_Blue | ejecuta setNextTrack()
+
+Todos estos eventos específicos son cancelables.
+
+
     this.onPlayPause = function(isPlay){ };
     this.onStop = function(){ };
-
-    this.onButtonRed = function(){ };
-    this.onButtonGreen = function(){ };
-    this.onButtonYellow = function(){ };
-    this.onButtonBlue = function(){ };
 
 -------------------------------------------------------------------
 ### Methods
