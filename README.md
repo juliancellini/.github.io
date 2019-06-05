@@ -100,6 +100,165 @@ El valor default es `"__SECONDS__"`, y no tiene realmente sentido cambiarlo.
 `jCPlayer.HEARTBEAT_TEMPLATE_SECONDS = "__AVANCE__";`
 
 -------------------------------------------------------------------
+### Events
+
+#### Generalidades
+
+Los eventos del JCPlayer son funciones asignadas a propiedades del objeto. Por ejemplo, este evento registra en la consola cada vez que arranca la reproducción de un video:
+
+```html
+jCPlayer.onPlay = function(e){
+     m = 'PLAY ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%)';
+     console.log(m);
+}; 	
+```
+
+Esto se logra asignando una función a la propiedad (`onPlay` en este caso).  La función recibirá los parámetros definidos para este evento y actuará en consecuencia.
+
+Algunos eventos (`onKeyDown` o `onUp`, por ejemplo) son *cancelables*: analizan el resultado de la invocación y si ésta es `false` no ejecutan la acción predeterminada. Ésto permite reemplazar comportamiento por default. Por ejemplo:
+
+```html
+jCPlayer.onUp = function(e){
+     //No subir el volumen del player...
+     //Hacemos que el volumen lo maneje la TV en forma nativa.
+     return false;
+}; 	
+```
+
+
+#### onPlay(event)
+
+No es cancelable.  
+Se dispara al iniciarse la reproducción, por primera vez o luego de una pausa.  
+`event` tiene las siguientes propiedades, directo de vimeo Player:
+
+Property | Description
+---------| -----------
+duration|The length of the video in seconds
+percent|The amount of the video that has played in comparison to the length of the video; multiply by 100 to obtain the percentage
+seconds|The amount of the video, in seconds, that has played
+
+```
+jCPlayer.onPlay = function(event){
+    m = 'PLAY ' + event.seconds + ' of ' + event.duration + 
+        ' (' +  (event.percent * 100).toFixed(2) + '%)';
+    console.log(m);
+};
+```
+
+#### onPause(event)
+
+No es cancelable.  
+Se dispara al pausarse la reproducción.  
+`event` tiene las siguientes propiedades, directo de vimeo Player:
+
+Property | Description
+---------| -----------
+duration|The length of the video in seconds
+percent|The amount of the video that has played in comparison to the length of the video; multiply by 100 to obtain the percentage
+seconds|The amount of the video, in seconds, that has played
+
+```
+jCPlayer.onPause = function(event){
+    m = 'PAUSE ' + event.seconds + ' of ' + event.duration + 
+        ' (' +  (event.percent * 100).toFixed(2) + '%)';
+    console.log(m);
+};
+```
+
+#### onEnded(event)
+
+No es cancelable.  
+Se dispara al llegar al final del video.  
+`event` tiene las siguientes propiedades, directo de vimeo Player:
+
+Property | Description
+---------| -----------
+duration|The length of the video in seconds
+percent|The amount of the video that has played in comparison to the length of the video; multiply by 100 to obtain the percentage
+seconds|The amount of the video, in seconds, that has played
+
+```
+jCPlayer.onEnded = function(event){
+    m = 'END ' + event.seconds + ' of ' + event.duration + 
+        ' (' +  (event.percent * 100).toFixed(2) + '%)';
+    console.log(m);
+};
+```
+
+
+#### onTimeUpdate(event)
+
+No es cancelable.  
+Se dispara durante la reproducción del video, muy seguido alrededor de una vez cada 250 milisegundos.  
+`event` tiene las siguientes propiedades, directo de vimeo Player:
+
+Property | Description
+---------| -----------
+duration|The length of the video in seconds
+percent|The amount of the video that has played in comparison to the length of the video; multiply by 100 to obtain the percentage
+seconds|The amount of the video, in seconds, that has played
+
+```
+jCPlayer.onTimeUpdate = function(event){
+    m = 'TIMEUPDATE ' + event.seconds + ' of ' + event.duration + 
+        ' (' +  (event.percent * 100).toFixed(2) + '%)';
+    console.log(m);
+};
+```
+
+
+#### onHeartbeat(event, heartbeat, reason)
+
+No es cancelable. Para evitarlo usar las propiedades `heartbeatOn___`.
+Se dispara después de hacer el GET del heartbeat.
+
+`event` tiene las siguientes propiedades, directo de vimeo Player:
+
+Property | Description
+---------| -----------
+duration|The length of the video in seconds
+percent|The amount of the video that has played in comparison to the length of the video; multiply by 100 to obtain the percentage
+seconds|The amount of the video, in seconds, that has played
+
+`heartbeat` es el valor que se informó como segundos de avance.
+
+`reason` es una string que indica qué originó el evento, y puede ser uno de estos valores:
+
+ * "OnSeeked"
+ * "OnInterval" 
+ * "OnPause" 
+ * "OnEnd"
+ * "OnDestroy"
+
+```
+jCPlayer.onTimeUpdate = function(event){
+    m = 'ONHEARTBEAT ' + event.seconds + ' of ' + event.duration + 
+        ' (' +  (event.percent * 100).toFixed(2) + '%). " + 
+	"lastHeartbeat:' + lastHeartbeat + " reason: " + reason;
+    console.log(m);
+};
+```
+
+
+    
+    this.onKeyDown = function(event){ };
+    
+    this.onClose = function(){ };
+    this.onUp = function(){ };
+    this.onDown = function(){ };
+    this.onLeft = function(){ };
+    this.onRight = function(){ };
+    this.onNumber = function(number){ };
+    this.onPlayPause = function(isPlay){ };
+    this.onStop = function(){ };
+
+    this.onButtonRed = function(){ };
+    this.onButtonGreen = function(){ };
+    this.onButtonYellow = function(){ };
+    this.onButtonBlue = function(){ };
+
+-------------------------------------------------------------------
 ### Methods
 
 #### Create
