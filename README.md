@@ -38,6 +38,13 @@ Hace que el JCPlayer saque por consola JS mensajes de estado y trazas.
 
 `JCPlayer.debug = true;`
 
+#### `initialSeek`: Seek Inicial
+
+Hace que el JCPlayer intente reproducir el video desde el segundo asignado. Intenta evitar un bug del vimeo player en ciertas TVs, difiriendo el seek hasta que esté cargado el video listo para reproducir (evento onLoaded de Vimeo Player).
+Una vez cargado el video, se realiza un seek normal y se asigna null a la variable.
+
+`JCPlayer.initialSeek = 314;`
+
 #### `heartbeatURL`: Dónde latir
 
 Indica la URL a la cual el JCPlayer llamará para indicar el avance de la reproducción de video.  
