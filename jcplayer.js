@@ -36,6 +36,7 @@ var VK_SPACE                    =    32;
 
 function JCPlayer() {
     this.debug = false;
+    this.initialSeek = null;
     this.heartbeatURL = null;
     this.heartbeatInterval = 60;
     this.heartbeatOnPause = true;
@@ -297,6 +298,21 @@ function JCPlayer() {
         that.onEnded(e);
     }
 
+    function _onLoaded(e) {
+
+        if (that.debug){
+            m = 'onLoaded id=' + e.id;
+            console.log(m);
+        }
+
+        if (that.initialSeek){
+            if (_player){
+                _player.setCurrentTime(that.initialSeek);
+            }
+            that.initialSeek = null;
+        }    
+    }
+
     this.initialize = function (iframe) {       
         var element = document.getElementById(iframe);
         if (element) {
@@ -317,6 +333,7 @@ function JCPlayer() {
         _player.on('seeked', _onSeeked);
         _player.on('ended', _onEnded);
         _player.on('pause', _onPause);
+        _player.on('loaded', _onLoaded);
 
     }
 
@@ -353,6 +370,7 @@ function JCPlayer() {
             iframe.style.border = 0;
             iframe.frameBorder = 0;
             iframe.tabIndex = "-1";
+            iframe.allow = "autoplay";
             if (allowFullScreen) {
                 iframe.setAttribute("allowfullscreen", true);
             }
