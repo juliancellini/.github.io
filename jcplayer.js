@@ -364,7 +364,7 @@ function JCPlayer() {
             _focusElementInterval = setInterval(function () { _focusElement.focus(); }, 100);
 
             var iframe = document.createElement('iframe');
-            iframe.src = 'https://player.vimeo.com/video/' + IdVimeo + "?app_id=122963&controls=0";
+            iframe.src = 'https://player.vimeo.com/video/' + IdVimeo + "?app_id=122963"; // &controls=0";
             iframe.style.width = "100%";
             iframe.style.height = "100%";
             iframe.style.border = 0;
