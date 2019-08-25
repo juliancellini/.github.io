@@ -113,6 +113,24 @@ function JCPlayer() {
         that.onTimeUpdate(e);
     }
 
+    function _doVolumeUp() {
+
+        _player.getVolume().then(function(volume) {
+            if (volume < 1){
+                _player.setVolume(Math.min(volume + 0.1, 1));
+            } 
+        });
+    }
+
+    function _doVolumeDown() {
+
+        _player.getVolume().then(function(volume) {
+            if (volume > 0){
+                _player.setVolume(Math.max(volume - 0.1, 0));
+            } 
+        });
+    }
+
     function _onKeyDown(e) {
 
         if (!_player){
@@ -143,11 +161,7 @@ function JCPlayer() {
                 return;
             }
 
-            _player.getVolume().then(function(volume) {
-                if (volume < 1){
-                    _player.setVolume(Math.min(volume + 0.1, 1));
-                } 
-            });
+            _doVolumeUp();
             return;
         }
 
@@ -156,11 +170,7 @@ function JCPlayer() {
                 return;
             }
 
-            _player.getVolume().then(function(volume) {
-                if (volume > 0){
-                    _player.setVolume(Math.max(volume - 0.1, 0));
-                } 
-            });
+            _doVolumeDown();
             return;
         }
 
@@ -228,7 +238,8 @@ function JCPlayer() {
             if (that.onButtonRed() === false) {
                 return;
             }
-            console.log("BUTTON RED!");
+
+            _doVolumeUp();
             return;
         }
 
@@ -236,7 +247,8 @@ function JCPlayer() {
             if (that.onButtonGreen() === false) {
                 return;
             }
-            console.log("BUTTON GREEN!");
+            
+            _doVolumeDown();
             return;
         }
 
@@ -364,7 +376,7 @@ function JCPlayer() {
             _focusElementInterval = setInterval(function () { _focusElement.focus(); }, 100);
 
             var iframe = document.createElement('iframe');
-            iframe.src = 'https://player.vimeo.com/video/' + IdVimeo + "?app_id=122963"; // &controls=0";
+            iframe.src = 'https://player.vimeo.com/video/' + IdVimeo + "?app_id=122963";
             iframe.style.width = "100%";
             iframe.style.height = "100%";
             iframe.style.border = 0;
