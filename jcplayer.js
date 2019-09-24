@@ -16,6 +16,7 @@ var VK_6                        =    54;
 var VK_7                        =    55;
 var VK_8                        =    56;
 var VK_9                        =    57;
+var VK_D                        =    68;
 var VK_RED                      =   403;
 var VK_GREEN                    =   404;
 var VK_YELLOW                   =   405;
@@ -36,6 +37,7 @@ var VK_SPACE                    =    32;
 
 function JCPlayer() {
     this.debug = false;
+    this.verbose = false;
     this.initialSeek = null;
     this.heartbeatURL = null;
     this.heartbeatInterval = 60;
@@ -45,6 +47,7 @@ function JCPlayer() {
     this.heartbeatOnInterval = true;
     this.heartbeatOnDestroy = true;    
     this.HEARTBEAT_TEMPLATE_SECONDS = "__SECONDS__";
+    this.DEBUG_DIV_ID = "jcplayer_debug_id";
 
     var _lastHeartbeat = 0;
     var that = this;
@@ -52,6 +55,7 @@ function JCPlayer() {
     var _trackCurrent = -1;
     var _focusElement = null;
     var _focusElementInterval = null;
+    var _yellowButtonCounter = 0;
 
     this.onPlay = function(event){};
     this.onPause = function(event){};
@@ -75,6 +79,17 @@ function JCPlayer() {
     this.onButtonYellow = function(){ };
     this.onButtonBlue = function(){ };
 
+    function _doDebugOutput(msg){
+        
+        console.log(msg);
+
+        var divElem = document.getElementById(that.DEBUG_DIV_ID);
+        if (divElem){
+            divElem.innerHTML += msg + "\n"; 
+            divElem.scrollTop = divElem.scrollHeight;
+        }
+    }
+
 
     function _doHeartbeat(e, reason){
 
@@ -89,7 +104,7 @@ function JCPlayer() {
     function _onSeeked(e) {
         if (that.debug){
             m = 'seek ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
-            console.log(m);
+            _doDebugOutput(m);
         }       
 
         _lastHeartbeat = Math.floor(e.seconds / that.heartbeatInterval) * that.heartbeatInterval;  
@@ -101,9 +116,9 @@ function JCPlayer() {
 
     function _onTimeupdate(e) {
 
-        if (that.debug){
+        if (that.debug && that.verbose){
             m = 'timeupdate ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
-            console.log(m);
+            _doDebugOutput(m);
         }
   
         if (that.heartbeatOnInterval && (e.seconds > (_lastHeartbeat + that.heartbeatInterval))){
@@ -134,25 +149,30 @@ function JCPlayer() {
     function _onKeyDown(e) {
 
         if (!_player){
-            console.log("NOT PLAYER!");
+            _doDebugOutput("NOT PLAYER!");
             return;
         }
 
         if (that.debug){
-            console.log(e);
+            _doDebugOutput("_onKeyDown: " + e.keyCode + " e.code: " + e.code);
         }
 
         if (that.onKeyDown(e) === false) {
             return;
         }
 
-        var keyCode = event.keyCode;
+        var keyCode = e.keyCode;
+
+        if (keyCode !== VK_YELLOW){
+            //clear show div_debug;
+            _yellowButtonCounter = 0;
+        }
 
         if (keyCode === VK_ESCAPE || keyCode === VK_BACK){          
             if (that.onClose() === false) {
                 return;
             }
-            console.log("ESCAPE!");
+            _doDebugOutput("ESCAPE!");
             return;
         }
 
@@ -222,7 +242,7 @@ function JCPlayer() {
             if (that.onStop() === false) {
                 return;
             }
-            console.log("STOP!");
+            _doDebugOutput("STOP!");
             return;
         }
 
@@ -234,7 +254,9 @@ function JCPlayer() {
             return;
         }
 
-        if (keyCode === VK_RED){            
+        if (keyCode === VK_RED){   
+            document.getElementById(that.DEBUG_DIV_ID).style.display = "none";          
+            
             if (that.onButtonRed() === false) {
                 return;
             }
@@ -243,7 +265,9 @@ function JCPlayer() {
             return;
         }
 
-        if (keyCode === VK_GREEN){          
+        if (keyCode === VK_GREEN){
+            document.getElementById(that.DEBUG_DIV_ID).style.display = "none";
+            
             if (that.onButtonGreen() === false) {
                 return;
             }
@@ -256,19 +280,38 @@ function JCPlayer() {
             if (that.onButtonYellow() === false) {
                 return;
             }
-            console.log("BUTTON YELLOW!");
+
+            _yellowButtonCounter++;
+
+            if (_yellowButtonCounter >= 10){
+                document.getElementById(that.DEBUG_DIV_ID).style.display = "";
+                that.debug = true;
+                _yellowButtonCounter = 0;
+            }
             return;
         }
 
-        if (keyCode === VK_BLUE){           
+        if (keyCode === VK_BLUE){
+            document.getElementById(that.DEBUG_DIV_ID).style.display = "none";            
+            
             if (that.onButtonBlue() === false) {
                 return;
             }
             that.setNextTrack();
             return;
         }
-        console.log("_onKeyDown Unhandled!");
-        console.log(e);
+
+        if (keyCode === VK_D){
+            
+            var divElem = document.getElementById(that.DEBUG_DIV_ID);
+            if (divElem){
+                divElem.style.display = (divElem.style.display === "none" ? "" : "none");
+            } 
+
+            return;
+        }
+
+        _doDebugOutput("_onKeyDown Unhandled!");
 
     }
 
@@ -276,7 +319,7 @@ function JCPlayer() {
 
         if (that.debug){
             m = 'onPlay ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
-            console.log(m);
+            _doDebugOutput(m);
         }
 
         that.onPlay(e);
@@ -286,7 +329,7 @@ function JCPlayer() {
 
         if (that.debug){
             m = 'onPause ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
-            console.log(m);
+            _doDebugOutput(m);
         }
 
         if (that.heartbeatOnPause){
@@ -300,7 +343,7 @@ function JCPlayer() {
 
         if (that.debug){
             m = 'onEnded ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
-            console.log(m);
+            _doDebugOutput(m);
         }
 
         if (that.heartbeatOnEnd){
@@ -314,7 +357,7 @@ function JCPlayer() {
 
         if (that.debug){
             m = 'onLoaded id=' + e.id;
-            console.log(m);
+            _doDebugOutput(m);
         }
 
         if (that.initialSeek){
@@ -388,6 +431,16 @@ function JCPlayer() {
             }
 
             elementOrId.appendChild(iframe);
+
+            var debugDiv = document.createElement('div');
+            debugDiv.style = "position:absolute;width:500px;right:20px;top:20px;bottom:50%;opacity:.7;" + 
+                             "background-color:black;color:white;border:1px solid white;white-space:pre;" + 
+                             "overflow-x:hidden;font-family:monospace;font-weight:bold;padding:5px;" + 
+                             "display:none;";
+            debugDiv.id = that.DEBUG_DIV_ID;
+            
+            elementOrId.appendChild(debugDiv);
+
 
             that.initialize(iframe);
 
