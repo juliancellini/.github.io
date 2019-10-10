@@ -103,7 +103,7 @@ function JCPlayer() {
 
     function _onSeeked(e) {
         if (that.debug){
-            m = 'seek ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
+            m = 'seek ' + e.seconds + ' of ' + e.duration + ' seconds (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
             _doDebugOutput(m);
         }       
 
@@ -117,7 +117,7 @@ function JCPlayer() {
     function _onTimeupdate(e) {
 
         if (that.debug && that.verbose){
-            m = 'timeupdate ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
+            m = 'timeupdate ' + e.seconds + ' of ' + e.duration + ' seconds (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
             _doDebugOutput(m);
         }
   
@@ -246,7 +246,7 @@ function JCPlayer() {
             return;
         }
 
-        if (keyCode === VK_PLAY || keyCode === VK_PAUSE || keyCode === VK_SPACE){           
+        if (keyCode === VK_PLAY || keyCode === VK_PAUSE || keyCode === VK_SPACE || keyCode === VK_ENTER ){           
             if (that.onPlayPause(keyCode === VK_PLAY) === false) {
                 return;
             }
@@ -283,7 +283,7 @@ function JCPlayer() {
 
             _yellowButtonCounter++;
 
-            if (_yellowButtonCounter >= 10){
+            if (_yellowButtonCounter >= 3){
                 document.getElementById(that.DEBUG_DIV_ID).style.display = "";
                 that.debug = true;
                 _yellowButtonCounter = 0;
@@ -306,6 +306,7 @@ function JCPlayer() {
             var divElem = document.getElementById(that.DEBUG_DIV_ID);
             if (divElem){
                 divElem.style.display = (divElem.style.display === "none" ? "" : "none");
+                that.debug = true;
             } 
 
             return;
@@ -318,7 +319,7 @@ function JCPlayer() {
     function _onPlay(e) {
 
         if (that.debug){
-            m = 'onPlay ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
+            m = 'onPlay ' + e.seconds + ' of ' + e.duration + ' seconds (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
             _doDebugOutput(m);
         }
 
@@ -328,7 +329,7 @@ function JCPlayer() {
     function _onPause(e) {
 
         if (that.debug){
-            m = 'onPause ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
+            m = 'onPause ' + e.seconds + ' of ' + e.duration + ' seconds (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
             _doDebugOutput(m);
         }
 
@@ -342,7 +343,7 @@ function JCPlayer() {
     function _onEnded(e) {
 
         if (that.debug){
-            m = 'onEnded ' + e.seconds + ' of ' + e.duration + ' (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
+            m = 'onEnded ' + e.seconds + ' of ' + e.duration + ' seconds (' +  (e.percent * 100).toFixed(2) + '%). HeartBeat=' + (_lastHeartbeat + that.heartbeatInterval);
             _doDebugOutput(m);
         }
 
@@ -353,11 +354,31 @@ function JCPlayer() {
         that.onEnded(e);
     }
 
+    function _onError(e) {
+
+        m = 'onError ' + e.name + ', method ' + e.method + ', messge "' + e.message + '"';
+        _doDebugOutput(m);
+    }
+
+    function _onBufferEnd(e) {
+
+        m = 'onBufferEnd';
+        _doDebugOutput(m);
+    }
+
+    function _onBufferStart(e) {
+
+        m = 'onBufferStart';
+        _doDebugOutput(m);
+    }
+
     function _onLoaded(e) {
 
         if (that.debug){
             m = 'onLoaded id=' + e.id;
+            _doDebugOutput("==============================");
             _doDebugOutput(m);
+            _doDebugOutput("------------------------------");
         }
 
         if (that.initialSeek){
@@ -383,12 +404,15 @@ function JCPlayer() {
 
         _player = new Vimeo.Player(iframe);
 
+        _player.on('error', _onError);
         _player.on('timeupdate', _onTimeupdate);
         _player.on('play', _onPlay);
         _player.on('seeked', _onSeeked);
         _player.on('ended', _onEnded);
         _player.on('pause', _onPause);
         _player.on('loaded', _onLoaded);
+        _player.on('bufferstart', _onBufferStart);
+        _player.on('bufferend', _onBufferEnd);
 
     }
 
@@ -432,15 +456,17 @@ function JCPlayer() {
 
             elementOrId.appendChild(iframe);
 
-            var debugDiv = document.createElement('div');
-            debugDiv.style = "position:absolute;width:500px;right:20px;top:20px;bottom:50%;opacity:.7;" + 
-                             "background-color:black;color:white;border:1px solid white;white-space:pre;" + 
-                             "overflow-x:hidden;font-family:monospace;font-weight:bold;padding:5px;" + 
-                             "display:none;";
-            debugDiv.id = that.DEBUG_DIV_ID;
-            
-            elementOrId.appendChild(debugDiv);
-
+            if (document.getElementById(that.DEBUG_DIV_ID) === null)
+            {
+                var debugDiv = document.createElement('div');
+                debugDiv.style = "position:absolute;width:500px;right:20px;top:20px;bottom:50%;opacity:.7;" + 
+                                 "background-color:black;color:white;border:1px solid white;white-space:pre;" + 
+                                 "overflow-x:hidden;font-family:monospace;font-weight:bold;padding:5px;" + 
+                                 "display:none;z-index:999999;";
+                debugDiv.id = that.DEBUG_DIV_ID;
+                
+                elementOrId.appendChild(debugDiv);
+            }
 
             that.initialize(iframe);
 
@@ -501,6 +527,14 @@ function JCPlayer() {
     }
 
     this.destroy = function () {
+
+        if (that.debug){
+            m = 'destroy ';
+            _doDebugOutput(m);
+            _doDebugOutput("==============================");
+            _doDebugOutput("");
+        }   
+
         if (_focusElementInterval){
             clearInterval(_focusElementInterval);
             _focusElementInterval = null;
