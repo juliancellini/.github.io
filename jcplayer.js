@@ -37,6 +37,7 @@ var VK_SPACE                    =    32;
 
 function JCPlayer() {
     this.debug = false;
+    this.delayedSeek = false;
     this.verbose = false;
     this.initialSeek = null;
     this.heartbeatURL = null;
@@ -90,6 +91,9 @@ function JCPlayer() {
         }
     }
 
+    function _doHandleError(error){        
+        _onError(error, "_doHandleError");
+    }
 
     function _doHeartbeat(e, reason){
 
@@ -132,7 +136,7 @@ function JCPlayer() {
 
         _player.getVolume().then(function(volume) {
             if (volume < 1){
-                _player.setVolume(Math.min(volume + 0.1, 1));
+                _player.setVolume(Math.min(volume + 0.1, 1)).catch(_doHandleError);
             } 
         });
     }
@@ -141,7 +145,7 @@ function JCPlayer() {
 
         _player.getVolume().then(function(volume) {
             if (volume > 0){
-                _player.setVolume(Math.max(volume - 0.1, 0));
+                _player.setVolume(Math.max(volume - 0.1, 0)).catch(_doHandleError);
             } 
         });
     }
@@ -203,7 +207,7 @@ function JCPlayer() {
                 if (seconds < 30) { 
                     seconds = 30;
                 }
-                _player.setCurrentTime(seconds - 30);
+                _player.setCurrentTime(seconds - 30).catch(_doHandleError);
             });
             return;
         }
@@ -216,7 +220,7 @@ function JCPlayer() {
             _player.getCurrentTime().then(function(seconds) {
                 _player.getDuration().then(function(duration) {
                     if (seconds + 30 < duration) { 
-                        _player.setCurrentTime(seconds + 30);
+                        _player.setCurrentTime(seconds + 30).catch(_doHandleError);
                     }                   
                 });
             });
@@ -354,9 +358,11 @@ function JCPlayer() {
         that.onEnded(e);
     }
 
-    function _onError(e) {
+    function _onError(e, description) {
 
-        m = 'onError ' + e.name + ', method ' + e.method + ', messge "' + e.message + '"';
+        description = description || "onErrorEvent";
+
+        m = description + ' {name: "' + e.name + '", method: "' + e.method + '", message: "' + e.message + '"}';
         _doDebugOutput(m);
     }
 
@@ -364,6 +370,13 @@ function JCPlayer() {
 
         m = 'onBufferEnd';
         _doDebugOutput(m);
+
+        if (that.initialSeek){
+            var currentTime = that.initialSeek;
+            _doDebugOutput("onBufferEnd (delayedSeek) initialSeek = " + currentTime);
+            _player.setCurrentTime(currentTime).catch(_doHandleError);
+            that.initialSeek = null;
+        }   
     }
 
     function _onBufferStart(e) {
@@ -381,9 +394,13 @@ function JCPlayer() {
             _doDebugOutput("------------------------------");
         }
 
-        if (that.initialSeek){
+        if (that.initialSeek && !that.delayedSeek){
             if (_player){
-                _player.setCurrentTime(that.initialSeek);
+                var currentTime = that.initialSeek;
+                setTimeout(function() {
+                    _doDebugOutput("setCurrentTime initialSeek = " + currentTime);
+                    _player.setCurrentTime(currentTime).catch(_doHandleError);}
+                , 10000);                
             }
             that.initialSeek = null;
         }    
@@ -477,19 +494,19 @@ function JCPlayer() {
 
     this.seek = function (seconds) {
         if (_player){
-            _player.setCurrentTime(seconds);
+            _player.setCurrentTime(seconds).catch(_doHandleError);
         }
     }
 
     this.play = function () {
         if (_player){
-            _player.play();
+            _player.play().catch(_doHandleError);
         }
     }
 
     this.pause = function () {
         if (_player){
-            _player.pause();
+            _player.pause().catch(_doHandleError);
         }
     }
 
@@ -518,11 +535,11 @@ function JCPlayer() {
         if (_player){
             _player.getPaused().then(function(paused) {
                 if (paused) {
-                    _player.play();
+                    _player.play().catch(_doHandleError);
                 } else {
-                    _player.pause();    
+                    _player.pause().catch(_doHandleError);    
                 }
-            });
+            }).catch(_doHandleError);
         }       
     }
 
@@ -585,10 +602,10 @@ function JCPlayer() {
 
 
 function getCORS(url, success) {
-        var xhr = new XMLHttpRequest();
-        if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
-        xhr.open('GET', url);
-        xhr.onload = success;
-        xhr.send();
-        return xhr;
-    }
+    var xhr = new XMLHttpRequest();
+    if (!('withCredentials' in xhr)) xhr = new XDomainRequest(); // fix IE8/9
+    xhr.open('GET', url);
+    xhr.onload = success;
+    xhr.send();
+    return xhr;
+}
